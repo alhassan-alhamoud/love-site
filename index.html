@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>بحبّك</title>
+  <style>
+    :root{
+      --bg1:#0b1022;
+      --bg2:#1a0b2e;
+      --glow:#ff2b7a;
+      --glow2:#7c5cff;
+      --text:#ffffff;
+
+      /* Herz-Feintuning */
+      --heart-color:#f20044;
+      --heart-size: 92px;          /* <- Größe hier steuern */
+      --heart-glow-1: 18px;
+      --heart-glow-2: 70px;
+      --heart-glow-3: 140px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      color:var(--text);
+      overflow:hidden;
+      background:
+        radial-gradient(1200px 800px at 20% 20%, rgba(124,92,255,.35), transparent 60%),
+        radial-gradient(900px 600px at 80% 30%, rgba(255,43,122,.28), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+
+    /* Hintergrund: Sterne */
+    .stars, .stars:before, .stars:after{
+      position:absolute; inset:-200px;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,.9) 50%, transparent 55%),
+        radial-gradient(1px 1px at 120px 160px, rgba(255,255,255,.7) 50%, transparent 55%),
+        radial-gradient(1px 1px at 300px 80px, rgba(255,255,255,.6) 50%, transparent 55%),
+        radial-gradient(2px 2px at 520px 220px, rgba(255,255,255,.8) 50%, transparent 55%),
+        radial-gradient(1px 1px at 740px 140px, rgba(255,255,255,.6) 50%, transparent 55%),
+        radial-gradient(2px 2px at 880px 260px, rgba(255,255,255,.75) 50%, transparent 55%);
+      background-size: 1000px 420px;
+      opacity:.35;
+      filter: blur(.2px);
+      animation: drift 18s linear infinite;
+    }
+    .stars:before{content:""; opacity:.22; animation-duration: 28s; transform: scale(1.3);}
+    .stars:after{content:""; opacity:.18; animation-duration: 40s; transform: scale(1.8);}
+    @keyframes drift{
+      from{transform:translate3d(0,0,0)}
+      to{transform:translate3d(-260px, 120px, 0)}
+    }
+
+    .wrap{
+      position:relative;
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      text-align:center;
+      z-index: 1;
+    }
+
+    .card{
+      position:relative;
+      width:min(760px, 92vw);
+      padding:48px 28px 40px;
+      border-radius:24px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(14px);
+      box-shadow:
+        0 20px 70px rgba(0,0,0,.45),
+        0 0 80px rgba(255,43,122,.12);
+      overflow:hidden;
+    }
+
+    /* animierter Glow-Rand */
+    .card:before{
+      content:"";
+      position:absolute; inset:-2px;
+      border-radius:26px;
+      background: conic-gradient(from 0deg,
+        rgba(255,43,122,.0),
+        rgba(255,43,122,.85),
+        rgba(124,92,255,.85),
+        rgba(255,43,122,.0)
+      );
+      filter: blur(10px);
+      opacity:.65;
+      animation: spin 6s linear infinite;
+      z-index:-1;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .headline{
+      font-size: clamp(34px, 6vw, 64px);
+      line-height:1.15;
+      margin: 0 0 10px;
+      letter-spacing: .2px;
+      text-shadow: 0 0 30px rgba(255,43,122,.25);
+    }
+
+    .sub{
+      margin: 0 auto 22px;
+      max-width: 52ch;
+      font-size: clamp(14px, 2.2vw, 18px);
+      opacity:.9;
+    }
+
+    .heart-area{
+      display:grid;
+      place-items:center;
+      margin: 18px 0 18px;
+      position:relative;
+      min-height: 130px;
+    }
+
+    /* HERZ (dein Code, angepasst) */
+    .heart {
+      position: relative;
+      height: var(--heart-size);
+      width: var(--heart-size);
+      background: var(--heart-color);
+      transform: rotate(-45deg);
+      box-shadow:
+        0 0 var(--heart-glow-1) rgba(242,0,68,.55),
+        0 0 var(--heart-glow-2) rgba(242,0,68,.35),
+        0 0 var(--heart-glow-3) rgba(242,0,68,.18);
+      animation: heart 0.85s ease-in-out infinite;
+    }
+    .heart::before {
+      content: "";
+      position: absolute;
+      width: var(--heart-size);
+      height: var(--heart-size);
+      background: var(--heart-color);
+      top: -50%;
+      left: 0;
+      border-radius: 50%;
+    }
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: var(--heart-size);
+      height: var(--heart-size);
+      background: var(--heart-color);
+      right: -50%;
+      top: 0;
+      border-radius: 50%;
+    }
+
+    @keyframes heart {
+      0%   { transform: rotate(-45deg) scale(1.08); }
+      50%  { transform: rotate(-45deg) scale(0.98); }
+      100% { transform: rotate(-45deg) scale(1.08); }
+    }
+
+    /* kleine aufsteigende Herzen */
+    .float{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+    .float i{
+      position:absolute;
+      left:50%;
+      top:65%;
+      width:12px; height:12px;
+      transform: translate(-50%,-50%) rotate(-45deg);
+      opacity:0;
+      animation: rise 3.2s ease-in infinite;
+      filter: drop-shadow(0 0 10px rgba(242,0,68,.45));
+      background: rgba(242,0,68,.95);
+      border-radius: 4px;
+    }
+    .float i::before, .float i::after{
+      content:"";
+      position:absolute;
+      width:12px; height:12px;
+      background: rgba(242,0,68,.95);
+      border-radius:50%;
+    }
+    .float i::before{ top:-6px; left:0; }
+    .float i::after{ left:6px; top:0; }
+
+    .float i:nth-child(1){ animation-delay: .0s; margin-left:-110px; }
+    .float i:nth-child(2){ animation-delay: .6s; margin-left:-36px; }
+    .float i:nth-child(3){ animation-delay: 1.2s; margin-left:36px; }
+    .float i:nth-child(4){ animation-delay: 1.8s; margin-left:110px; }
+
+    @keyframes rise{
+      0%   { transform: translate(-50%,-50%) rotate(-45deg) scale(.75); opacity:0; }
+      15%  { opacity:.9; }
+      60%  { opacity:.75; }
+      100% { transform: translate(-50%,-230px) rotate(-45deg) scale(1.25); opacity:0; }
+    }
+
+    /* Button bleibt optisch gleich, ist aber klickbar */
+    .pill{
+      appearance: none;
+      cursor: pointer;
+      display:inline-block;
+      padding:10px 16px;
+      border-radius:999px;
+      background: rgba(124,92,255,.16);
+      border: 1px solid rgba(124,92,255,.28);
+      font-weight:700;
+      letter-spacing:.2px;
+      color: var(--text);
+      box-shadow: 0 0 30px rgba(124,92,255,.14);
+      transition: transform .12s ease, filter .12s ease;
+    }
+    .pill:hover{ transform: translateY(-1px); filter: brightness(1.08); }
+    .pill:active{ transform: translateY(0px) scale(.98); }
+
+    .footer{
+      margin-top: 16px;
+      font-size: 13px;
+      opacity:.78;
+    }
+
+    /* ---------------------------------------------
+       FALLING HEARTS (neu)
+    --------------------------------------------- */
+    .fall-layer{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .fall-heart{
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      line-height: 1;
+      will-change: transform, top, opacity;
+      filter:
+        drop-shadow(0 0 10px rgba(242,0,68,.55))
+        drop-shadow(0 0 30px rgba(242,0,68,.25));
+      animation: fall var(--dur) linear forwards;
+      opacity: .95;
+      user-select: none;
+    }
+
+    @keyframes fall{
+      0%{
+        transform: translateX(0) translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      8%{ opacity: .95; }
+      100%{
+        transform: translateX(var(--dx)) translateY(var(--drop)) rotate(var(--rot));
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars"></div>
+  <div class="fall-layer" id="fallLayer" aria-hidden="true"></div>
+
+  <!-- AUDIO (Dropbox Direct Link) -->
+ <audio id="bgm" preload="auto" loop playsinline>
+  <source src="https://www.dropbox.com/scl/fi/ffbh4zympnwjjdrmud77c/love.mp3?rlkey=nxuazgo0iwl4nkihpbbchrf4g&st=jfkeatb4&dl=1" type="audio/mpeg">
+</audio>
+
+
+  <main class="wrap">
+    <section class="card" aria-label="بطاقة حب">
+      <h1 class="headline">بحبّك ❤️</h1>
+      <p class="sub">
+        إنتِ أجمل شي صار بحياتي… وكل مرة بتفتحي هالرابط بتلاقي هالقلب عم يدق إلك.
+      </p>
+
+      <div class="heart-area" aria-hidden="true">
+        <div class="heart"></div>
+        <div class="float"><i></i><i></i><i></i><i></i></div>
+      </div>
+
+      <button class="pill" id="loveBtn" type="button">إلك وبس</button>
+      <div class="footer">— من الشخص اللي بيحبّك</div>
+    </section>
+  </main>
+
+  <script>
+    const btn = document.getElementById("loveBtn");
+    const layer = document.getElementById("fallLayer");
+    const bgm = document.getElementById("bgm");
+
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    async function tryPlayBgm() {
+      if (!bgm) return;
+      try {
+        bgm.volume = 0.85;      // 0.0 - 1.0
+        await bgm.play();       // Versuch Autoplay
+      } catch (e) {
+        // Autoplay blockiert -> startet beim ersten Klick/Tap
+      }
+    }
+
+    // Versuch: direkt beim Öffnen starten
+    window.addEventListener("load", tryPlayBgm);
+
+    // Fallback: beim ersten User-Gesture starten (Mobile/iOS)
+    function startOnFirstGesture() {
+      tryPlayBgm();
+      window.removeEventListener("pointerdown", startOnFirstGesture);
+      window.removeEventListener("keydown", startOnFirstGesture);
+    }
+    window.addEventListener("pointerdown", startOnFirstGesture, { once: true });
+    window.addEventListener("keydown", startOnFirstGesture, { once: true });
+
+    function spawnFallingHeart() {
+      const el = document.createElement("div");
+      el.className = "fall-heart";
+      el.textContent = "❤";
+
+      // random Startposition (oben)
+      const startX = rand(5, 95); // Prozent
+      el.style.left = startX + "vw";
+
+      // random Größe / Dauer / Drift / Rotation / Fallstrecke
+      const size = rand(16, 34);
+      const dur = rand(2.2, 4.2);
+      const dx = rand(-140, 140) + "px";
+      const rot = rand(-240, 240) + "deg";
+      const drop = (window.innerHeight + 120) + "px";
+
+      el.style.fontSize = size + "px";
+      el.style.setProperty("--dur", dur + "s");
+      el.style.setProperty("--dx", dx);
+      el.style.setProperty("--rot", rot);
+      el.style.setProperty("--drop", drop);
+
+      layer.appendChild(el);
+
+      el.addEventListener("animationend", () => {
+        el.remove();
+      });
+    }
+
+    btn.addEventListener("click", () => {
+      // Klick startet auch Musik, falls vorher blockiert
+      tryPlayBgm();
+
+      spawnFallingHeart();
+
+      // optional: kleiner "Burst" manchmal (random)
+      if (Math.random() < 0.35) {
+        const extra = Math.floor(rand(1, 4));
+        for (let i = 0; i < extra; i++) {
+          setTimeout(spawnFallingHeart, i * 120);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
